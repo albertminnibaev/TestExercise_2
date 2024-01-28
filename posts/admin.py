@@ -8,16 +8,14 @@ from posts.models import Post, Comment
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'text', 'image', 'created_at', 'date_of_change',
-                    'view_comments_link', 'view_author_link')
+    list_display = ('id', 'title', 'text', 'image', 'created_at', 'date_of_change', 'view_author_link',
+                    'view_comments_link')
     list_filter = ('created_at',)
 
     def view_comments_link(self, obj):
         count = obj.comment_set.count()
         url = (
-                reverse("admin:posts_comment_changelist")
-                + "?"
-                + urlencode({"post__id": f"{obj.id}"})
+            reverse("admin:posts_comment_changelist") + "?" + urlencode({"post__id": f"{obj.id}"})
         )
         return format_html('<a href="{}">{} Comments</a>', url, count)
 
@@ -25,9 +23,7 @@ class PostAdmin(admin.ModelAdmin):
 
     def view_author_link(self, obj):
         url = (
-                reverse("admin:users_user_changelist")
-                + "?"
-                + urlencode({"id": f"{obj.author.id}"})
+            reverse("admin:users_user_changelist") + "?" + urlencode({"id": f"{obj.author.id}"})
         )
         return format_html('<a href="{}">Author</a>', url)
 

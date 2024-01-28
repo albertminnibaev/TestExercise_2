@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, date
+from datetime import datetime, date
 
 from rest_framework import serializers
 
@@ -14,7 +14,15 @@ class CommentSerializer(serializers.ModelSerializer):
         read_only_fields = ['author']
 
 
-class PostSerializer(serializers.ModelSerializer):
+class CommentUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Comment
+        exclude = ('post',)
+        read_only_fields = ['author']
+
+
+class PostCreateSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(source='comment_set', many=True, read_only=True)
 
     def validate_author(self, value):
@@ -29,7 +37,19 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['title', 'text', 'author', 'image', 'comments', 'created_at', 'date_of_change']
+        fields = ['title', 'text', 'image', 'author', 'comments', 'created_at', 'date_of_change']
+        validators = [
+            TitleValidators(fields=('title',))
+        ]
+
+
+class PostSerializer(serializers.ModelSerializer):
+    comments = CommentSerializer(source='comment_set', many=True, read_only=True)
+
+    class Meta:
+        model = Post
+        fields = ['title', 'text', 'image','author', 'comments', 'created_at', 'date_of_change']
+        read_only_fields = ['author']
         validators = [
             TitleValidators(fields=('title',))
         ]

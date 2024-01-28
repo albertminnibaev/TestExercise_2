@@ -5,7 +5,7 @@ from users.models import User
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'first_name', 'last_name', 'email', 'date_of_birth')
+    list_display = ('id', 'number', 'first_name', 'last_name', 'email', 'date_of_birth')
 
     def get_model_perms(self, request):
         return {

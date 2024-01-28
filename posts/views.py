@@ -1,15 +1,13 @@
-from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from posts.models import Post, Comment
 from posts.permissions import IsAdmin, IsAuthor
-from posts.serializers import PostSerializer, CommentSerializer
+from posts.serializers import PostSerializer, CommentSerializer, PostCreateSerializer, CommentUpdateSerializer
 
 
 class PostsViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
-    serializer_class = PostSerializer
 
     def get_permissions(self):
         if self.action in ['create']:
@@ -25,10 +23,14 @@ class PostsViewSet(viewsets.ModelViewSet):
         new_post.author = self.request.user
         new_post.save()
 
+    def get_serializer_class(self):
+        if self.action in ['create']:
+            return PostCreateSerializer
+        return PostSerializer
+
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
 
     def get_permissions(self):
         if self.action in ['create']:
@@ -43,3 +45,8 @@ class CommentViewSet(viewsets.ModelViewSet):
         new_comments = serializer.save()
         new_comments.author = self.request.user
         new_comments.save()
+
+    def get_serializer_class(self):
+        if self.action in ['partial_update', 'update']:
+            return CommentUpdateSerializer
+        return CommentSerializer

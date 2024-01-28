@@ -14,6 +14,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(unique=True, verbose_name='адрес электронной почты')
     image = models.ImageField(upload_to='users/', default='users/avatar_default.jpeg', verbose_name='аватар',
                               **NULLABLE)
+    number = models.PositiveIntegerField(**NULLABLE)
     date_of_birth = models.DateField(verbose_name='дата рождения')
     created_at = models.DateField(auto_now_add=True, verbose_name='дата создания')
     date_of_change = models.DateField(auto_now=True, verbose_name='дата редактирования')
