@@ -30,8 +30,6 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['title', 'text', 'author', 'image', 'comments', 'created_at', 'date_of_change']
-        # read_only_fields = ['author']
         validators = [
             TitleValidators(fields=('title',))
-            # AuthorValidators(fields=('author',))
         ]
